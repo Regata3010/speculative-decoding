@@ -1,0 +1,58 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+specdec_env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Model cache
+.cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment
+.env
+.claude/
+
+# Documentation text files (internal notes, not for repo)
+*.txt
+!requirements.txt
+
+# Stray benchmark JSON in root
+benchmark_*.json
+
+# Raw benchmark run data (large, regenerable)
+run1*/
+run2*/
+run3*/
+run4*/
+run5*/
+results/
+
+# Plots — ignore all generated plots except curated ones for README
+plots/run1/
+!plots/run2/
+!plots/run5/
+plots/run2/*.pdf
+plots/run2/*.svg
+plots/run5/*.pdf
+plots/run5/*.svg
