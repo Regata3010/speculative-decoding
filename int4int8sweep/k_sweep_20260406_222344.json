@@ -1,0 +1,319 @@
+{
+  "timestamp": "2026-04-06T22:23:44.236987",
+  "model_pair": "qwen-72b",
+  "target_quant": "8bit",
+  "draft_quant": "4bit",
+  "results": [
+    {
+      "K": 1,
+      "spec_tps": 7.0,
+      "base_tps": 5.4,
+      "speedup": 1.29,
+      "acceptance_rate": 0.884,
+      "tokens_per_target_call": 1.86,
+      "per_position_acceptance": [
+        0.916
+      ],
+      "position_proposed": [
+        3399
+      ],
+      "position_accepted": [
+        3113
+      ],
+      "profiling": {
+        "draft_time_s": 1.4717,
+        "target_time_s": 10.0534,
+        "sampling_time_s": 0.0143,
+        "cache_time_s": 0.0025,
+        "overhead_time_s": 0.0099,
+        "draft_pct": 12.7,
+        "target_pct": 87.0,
+        "sampling_pct": 0.1,
+        "cache_pct": 0.0,
+        "overhead_pct": 0.1
+      }
+    },
+    {
+      "K": 2,
+      "spec_tps": 9.2,
+      "base_tps": 5.6,
+      "speedup": 1.63,
+      "acceptance_rate": 0.851,
+      "tokens_per_target_call": 2.65,
+      "per_position_acceptance": [
+        0.913,
+        0.845
+      ],
+      "position_proposed": [
+        2180,
+        2172
+      ],
+      "position_accepted": [
+        1990,
+        1836
+      ],
+      "profiling": {
+        "draft_time_s": 1.4888,
+        "target_time_s": 7.1308,
+        "sampling_time_s": 0.0103,
+        "cache_time_s": 0.0036,
+        "overhead_time_s": 0.0071,
+        "draft_pct": 17.2,
+        "target_pct": 82.5,
+        "sampling_pct": 0.1,
+        "cache_pct": 0.0,
+        "overhead_pct": 0.1
+      }
+    },
+    {
+      "K": 3,
+      "spec_tps": 11.1,
+      "base_tps": 5.7,
+      "speedup": 1.94,
+      "acceptance_rate": 0.811,
+      "tokens_per_target_call": 3.33,
+      "per_position_acceptance": [
+        0.901,
+        0.836,
+        0.783
+      ],
+      "position_proposed": [
+        2004,
+        1994,
+        1986
+      ],
+      "position_accepted": [
+        1806,
+        1666,
+        1556
+      ],
+      "profiling": {
+        "draft_time_s": 1.6158,
+        "target_time_s": 5.8413,
+        "sampling_time_s": 0.0089,
+        "cache_time_s": 0.0036,
+        "overhead_time_s": 0.0063,
+        "draft_pct": 21.6,
+        "target_pct": 78.1,
+        "sampling_pct": 0.1,
+        "cache_pct": 0.0,
+        "overhead_pct": 0.1
+      }
+    },
+    {
+      "K": 5,
+      "spec_tps": 12.6,
+      "base_tps": 5.7,
+      "speedup": 2.23,
+      "acceptance_rate": 0.736,
+      "tokens_per_target_call": 4.49,
+      "per_position_acceptance": [
+        0.89,
+        0.8,
+        0.735,
+        0.69,
+        0.638
+      ],
+      "position_proposed": [
+        1159,
+        1157,
+        1155,
+        1153,
+        1147
+      ],
+      "position_accepted": [
+        1032,
+        926,
+        849,
+        796,
+        732
+      ],
+      "profiling": {
+        "draft_time_s": 1.6412,
+        "target_time_s": 4.0327,
+        "sampling_time_s": 0.007,
+        "cache_time_s": 0.004,
+        "overhead_time_s": 0.0053,
+        "draft_pct": 28.8,
+        "target_pct": 70.9,
+        "sampling_pct": 0.1,
+        "cache_pct": 0.1,
+        "overhead_pct": 0.1
+      }
+    },
+    {
+      "K": 7,
+      "spec_tps": 13.7,
+      "base_tps": 5.6,
+      "speedup": 2.45,
+      "acceptance_rate": 0.687,
+      "tokens_per_target_call": 5.5,
+      "per_position_acceptance": [
+        0.866,
+        0.77,
+        0.713,
+        0.641,
+        0.599,
+        0.558,
+        0.521
+      ],
+      "position_proposed": [
+        1070,
+        1060,
+        1056,
+        1056,
+        1054,
+        1053,
+        1053
+      ],
+      "position_accepted": [
+        927,
+        816,
+        753,
+        677,
+        631,
+        588,
+        549
+      ],
+      "profiling": {
+        "draft_time_s": 1.6976,
+        "target_time_s": 3.1736,
+        "sampling_time_s": 0.0054,
+        "cache_time_s": 0.0037,
+        "overhead_time_s": 0.0044,
+        "draft_pct": 34.8,
+        "target_pct": 65.0,
+        "sampling_pct": 0.1,
+        "cache_pct": 0.1,
+        "overhead_pct": 0.1
+      }
+    },
+    {
+      "K": 10,
+      "spec_tps": 14.7,
+      "base_tps": 5.6,
+      "speedup": 2.65,
+      "acceptance_rate": 0.62,
+      "tokens_per_target_call": 6.68,
+      "per_position_acceptance": [
+        0.879,
+        0.787,
+        0.719,
+        0.667,
+        0.616,
+        0.577,
+        0.514,
+        0.487,
+        0.443,
+        0.405
+      ],
+      "position_proposed": [
+        856,
+        856,
+        850,
+        850,
+        846,
+        844,
+        844,
+        835,
+        833,
+        829
+      ],
+      "position_accepted": [
+        752,
+        674,
+        611,
+        567,
+        521,
+        487,
+        434,
+        407,
+        369,
+        336
+      ],
+      "profiling": {
+        "draft_time_s": 2.3561,
+        "target_time_s": 3.1967,
+        "sampling_time_s": 0.0057,
+        "cache_time_s": 0.0044,
+        "overhead_time_s": 0.0049,
+        "draft_pct": 42.3,
+        "target_pct": 57.4,
+        "sampling_pct": 0.1,
+        "cache_pct": 0.1,
+        "overhead_pct": 0.1
+      }
+    },
+    {
+      "K": 15,
+      "spec_tps": 15.8,
+      "base_tps": 5.6,
+      "speedup": 2.84,
+      "acceptance_rate": 0.555,
+      "tokens_per_target_call": 8.46,
+      "per_position_acceptance": [
+        0.845,
+        0.742,
+        0.696,
+        0.612,
+        0.551,
+        0.513,
+        0.469,
+        0.44,
+        0.406,
+        0.398,
+        0.383,
+        0.375,
+        0.366,
+        0.356,
+        0.344
+      ],
+      "position_proposed": [
+        722,
+        720,
+        716,
+        716,
+        712,
+        710,
+        708,
+        704,
+        702,
+        694,
+        690,
+        688,
+        688,
+        686,
+        686
+      ],
+      "position_accepted": [
+        610,
+        534,
+        498,
+        438,
+        392,
+        364,
+        332,
+        310,
+        285,
+        276,
+        264,
+        258,
+        252,
+        244,
+        236
+      ],
+      "profiling": {
+        "draft_time_s": 2.6889,
+        "target_time_s": 2.5695,
+        "sampling_time_s": 0.0046,
+        "cache_time_s": 0.0044,
+        "overhead_time_s": 0.0045,
+        "draft_pct": 51.0,
+        "target_pct": 48.7,
+        "sampling_pct": 0.1,
+        "cache_pct": 0.1,
+        "overhead_pct": 0.1
+      }
+    }
+  ]
+}

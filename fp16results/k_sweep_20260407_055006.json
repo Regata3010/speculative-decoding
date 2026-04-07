@@ -1,0 +1,319 @@
+{
+  "timestamp": "2026-04-07T05:50:06.423962",
+  "model_pair": "qwen-72b",
+  "target_quant": "8bit",
+  "draft_quant": null,
+  "results": [
+    {
+      "K": 1,
+      "spec_tps": 7.1,
+      "base_tps": 5.3,
+      "speedup": 1.34,
+      "acceptance_rate": 0.887,
+      "tokens_per_target_call": 1.87,
+      "per_position_acceptance": [
+        0.919
+      ],
+      "position_proposed": [
+        3129
+      ],
+      "position_accepted": [
+        2876
+      ],
+      "profiling": {
+        "draft_time_s": 1.0582,
+        "target_time_s": 10.5747,
+        "sampling_time_s": 0.0182,
+        "cache_time_s": 0.0038,
+        "overhead_time_s": 0.0117,
+        "draft_pct": 9.1,
+        "target_pct": 90.6,
+        "sampling_pct": 0.2,
+        "cache_pct": 0.0,
+        "overhead_pct": 0.1
+      }
+    },
+    {
+      "K": 2,
+      "spec_tps": 9.6,
+      "base_tps": 5.4,
+      "speedup": 1.79,
+      "acceptance_rate": 0.849,
+      "tokens_per_target_call": 2.65,
+      "per_position_acceptance": [
+        0.897,
+        0.828
+      ],
+      "position_proposed": [
+        2302,
+        2290
+      ],
+      "position_accepted": [
+        2066,
+        1896
+      ],
+      "profiling": {
+        "draft_time_s": 1.1102,
+        "target_time_s": 7.6763,
+        "sampling_time_s": 0.0134,
+        "cache_time_s": 0.0051,
+        "overhead_time_s": 0.0087,
+        "draft_pct": 12.6,
+        "target_pct": 87.1,
+        "sampling_pct": 0.2,
+        "cache_pct": 0.1,
+        "overhead_pct": 0.1
+      }
+    },
+    {
+      "K": 3,
+      "spec_tps": 10.9,
+      "base_tps": 5.4,
+      "speedup": 2.02,
+      "acceptance_rate": 0.806,
+      "tokens_per_target_call": 3.32,
+      "per_position_acceptance": [
+        0.904,
+        0.833,
+        0.785
+      ],
+      "position_proposed": [
+        1858,
+        1846,
+        1842
+      ],
+      "position_accepted": [
+        1680,
+        1538,
+        1446
+      ],
+      "profiling": {
+        "draft_time_s": 1.1199,
+        "target_time_s": 5.8714,
+        "sampling_time_s": 0.01,
+        "cache_time_s": 0.0044,
+        "overhead_time_s": 0.0069,
+        "draft_pct": 16.0,
+        "target_pct": 83.7,
+        "sampling_pct": 0.1,
+        "cache_pct": 0.1,
+        "overhead_pct": 0.1
+      }
+    },
+    {
+      "K": 5,
+      "spec_tps": 13.6,
+      "base_tps": 5.4,
+      "speedup": 2.5,
+      "acceptance_rate": 0.752,
+      "tokens_per_target_call": 4.57,
+      "per_position_acceptance": [
+        0.901,
+        0.815,
+        0.755,
+        0.704,
+        0.665
+      ],
+      "position_proposed": [
+        1248,
+        1244,
+        1240,
+        1238,
+        1230
+      ],
+      "position_accepted": [
+        1124,
+        1014,
+        936,
+        872,
+        818
+      ],
+      "profiling": {
+        "draft_time_s": 1.2399,
+        "target_time_s": 4.5127,
+        "sampling_time_s": 0.0082,
+        "cache_time_s": 0.0056,
+        "overhead_time_s": 0.0058,
+        "draft_pct": 21.5,
+        "target_pct": 78.2,
+        "sampling_pct": 0.1,
+        "cache_pct": 0.1,
+        "overhead_pct": 0.1
+      }
+    },
+    {
+      "K": 7,
+      "spec_tps": 14.9,
+      "base_tps": 5.4,
+      "speedup": 2.73,
+      "acceptance_rate": 0.694,
+      "tokens_per_target_call": 5.56,
+      "per_position_acceptance": [
+        0.86,
+        0.759,
+        0.69,
+        0.643,
+        0.602,
+        0.574,
+        0.541
+      ],
+      "position_proposed": [
+        1114,
+        1109,
+        1105,
+        1101,
+        1097,
+        1097,
+        1095
+      ],
+      "position_accepted": [
+        958,
+        842,
+        762,
+        708,
+        660,
+        630,
+        592
+      ],
+      "profiling": {
+        "draft_time_s": 1.4664,
+        "target_time_s": 3.9741,
+        "sampling_time_s": 0.0071,
+        "cache_time_s": 0.0056,
+        "overhead_time_s": 0.0055,
+        "draft_pct": 26.9,
+        "target_pct": 72.8,
+        "sampling_pct": 0.1,
+        "cache_pct": 0.1,
+        "overhead_pct": 0.1
+      }
+    },
+    {
+      "K": 10,
+      "spec_tps": 15.7,
+      "base_tps": 5.3,
+      "speedup": 2.93,
+      "acceptance_rate": 0.616,
+      "tokens_per_target_call": 6.66,
+      "per_position_acceptance": [
+        0.895,
+        0.811,
+        0.758,
+        0.722,
+        0.664,
+        0.64,
+        0.594,
+        0.564,
+        0.539,
+        0.524
+      ],
+      "position_proposed": [
+        722,
+        720,
+        718,
+        716,
+        712,
+        712,
+        709,
+        707,
+        699,
+        696
+      ],
+      "position_accepted": [
+        646,
+        584,
+        544,
+        517,
+        473,
+        456,
+        421,
+        399,
+        377,
+        365
+      ],
+      "profiling": {
+        "draft_time_s": 1.9435,
+        "target_time_s": 3.8097,
+        "sampling_time_s": 0.0069,
+        "cache_time_s": 0.0058,
+        "overhead_time_s": 0.0057,
+        "draft_pct": 33.7,
+        "target_pct": 66.0,
+        "sampling_pct": 0.1,
+        "cache_pct": 0.1,
+        "overhead_pct": 0.1
+      }
+    },
+    {
+      "K": 15,
+      "spec_tps": 17.6,
+      "base_tps": 5.3,
+      "speedup": 3.3,
+      "acceptance_rate": 0.556,
+      "tokens_per_target_call": 8.5,
+      "per_position_acceptance": [
+        0.842,
+        0.712,
+        0.654,
+        0.588,
+        0.537,
+        0.505,
+        0.45,
+        0.426,
+        0.402,
+        0.384,
+        0.374,
+        0.359,
+        0.352,
+        0.345,
+        0.334
+      ],
+      "position_proposed": [
+        774,
+        772,
+        768,
+        762,
+        760,
+        760,
+        756,
+        756,
+        756,
+        750,
+        744,
+        740,
+        732,
+        730,
+        724
+      ],
+      "position_accepted": [
+        652,
+        550,
+        502,
+        448,
+        408,
+        384,
+        340,
+        322,
+        304,
+        288,
+        278,
+        266,
+        258,
+        252,
+        242
+      ],
+      "profiling": {
+        "draft_time_s": 2.4674,
+        "target_time_s": 3.3585,
+        "sampling_time_s": 0.0062,
+        "cache_time_s": 0.0063,
+        "overhead_time_s": 0.0058,
+        "draft_pct": 42.2,
+        "target_pct": 57.5,
+        "sampling_pct": 0.1,
+        "cache_pct": 0.1,
+        "overhead_pct": 0.1
+      }
+    }
+  ]
+}
