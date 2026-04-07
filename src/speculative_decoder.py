@@ -71,6 +71,10 @@ class SpeculativeDecoder:
         n_accepted_draft = 0
         n_total_draft = 0
 
+        # Per-position acceptance tracking
+        position_accepted = [0] * self.K
+        position_proposed = [0] * self.K
+
         # Profiling accumulators
         prof = ProfilingData() if profile else None
         _sync = torch.cuda.synchronize if self.device.type == "cuda" else lambda: None
@@ -193,6 +197,16 @@ class SpeculativeDecoder:
             n_total_draft += k
             n_accepted_draft += n_accepted
 
+            # Track per-position acceptance
+            for pos in range(k):
+                if pos < len(position_proposed):
+                    position_proposed[pos] += 1
+                    if pos < n_accepted:
+                        position_accepted[pos] += 1
+                else:
+                    # k > self.K shouldn't happen, but be safe
+                    break
+
             # Append accepted draft tokens
             hit_eos = False
             for i in range(n_accepted):
@@ -239,11 +253,14 @@ class SpeculativeDecoder:
                 n_total_draft_tokens=n_total_draft,
                 wall_clock_seconds=total_elapsed,
                 profiling=prof,
+                position_accepted=position_accepted[:self.K],
+                position_proposed=position_proposed[:self.K],
             )
 
         return self._build_result(
             generated_ids, prompt_len, n_target_calls,
             n_accepted_draft, n_total_draft, timer, prof,
+            position_accepted, position_proposed,
         )
 
     def _draft_generate(
@@ -299,6 +316,8 @@ class SpeculativeDecoder:
         n_total_draft: int,
         timer: CudaTimer,
         prof: ProfilingData | None,
+        position_accepted: list[int] | None = None,
+        position_proposed: list[int] | None = None,
     ) -> GenerationResult:
         elapsed = timer.stop()
         new_tokens = generated_ids[prompt_len:]
@@ -317,4 +336,6 @@ class SpeculativeDecoder:
             n_total_draft_tokens=n_total_draft,
             wall_clock_seconds=elapsed,
             profiling=prof,
+            position_accepted=position_accepted or [],
+            position_proposed=position_proposed or [],
         )

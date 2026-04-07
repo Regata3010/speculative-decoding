@@ -53,6 +53,11 @@ class GenerationResult:
     n_total_draft_tokens: int = 0
     wall_clock_seconds: float = 0.0
     profiling: ProfilingData | None = None
+    # Per-position acceptance tracking: position_accepted[i] = number of times
+    # position i in the draft sequence was accepted. position_proposed[i] = number
+    # of times position i was proposed (reached before rejection).
+    position_accepted: list[int] = field(default_factory=list)
+    position_proposed: list[int] = field(default_factory=list)
 
     @property
     def tokens_per_second(self) -> float:
@@ -77,6 +82,20 @@ class GenerationResult:
         if self.n_generated_tokens == 0:
             return 0.0
         return self.wall_clock_seconds / self.n_generated_tokens
+
+    @property
+    def per_position_acceptance_rate(self) -> list[float]:
+        """Acceptance rate at each draft position (0 = first draft token, K-1 = last).
+
+        Position 0 is always reached. Position i is only reached if positions
+        0..i-1 were all accepted. A declining curve shows that later positions
+        are harder to predict — the draft model's accuracy degrades further
+        from the last verified token.
+        """
+        rates = []
+        for acc, prop in zip(self.position_accepted, self.position_proposed):
+            rates.append(acc / prop if prop > 0 else 0.0)
+        return rates
 
 
 class CudaTimer:

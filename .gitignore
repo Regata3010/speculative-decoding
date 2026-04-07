@@ -52,7 +52,7 @@ results/
 plots/run1/
 !plots/run2/
 !plots/run5/
-plots/run2/*.pdf
-plots/run2/*.svg
-plots/run5/*.pdf
-plots/run5/*.svg
+!plots/k_sweep/
+!plots/quantization/
+plots/**/*.pdf
+plots/**/*.svg

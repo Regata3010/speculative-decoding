@@ -1,6 +1,6 @@
 # Speculative Decoding from Scratch
 
-A from-scratch implementation of speculative decoding on HuggingFace Transformers achieving **2.60x average / 3.24x peak speedup** on Qwen-72B and **2.16x / 3.21x on Llama-70B** (H200 GPU). Profiled and optimized across 5 benchmark iterations across two model families — identified Python overhead as the primary bottleneck via per-phase profiling, then scaled to large quantized targets on high-bandwidth GPUs where speculative decoding delivers real throughput gains. 100% of prompts above 1x speedup on Qwen-72B.
+A from-scratch implementation of speculative decoding on HuggingFace Transformers achieving **3.30x peak speedup** (K=15) on Qwen-72B and **2.16x average on Llama-70B** (H200 GPU). Includes per-position acceptance rate analysis, quantization precision experiments (FP16 vs INT4 vs INT8 draft), and K-value optimization. Profiled across 5+ benchmark iterations — identified Python overhead via per-phase profiling, then scaled to large quantized targets on high-bandwidth GPUs. 100% of prompts above 1x speedup.
 
 ## What is Speculative Decoding?
 
@@ -109,6 +109,36 @@ The 4-bit vs 8-bit comparison proves a key insight: **4-bit makes the baseline t
 **100% of prompts above 1x speedup** on Qwen 72B (8-bit). Lowest: poem at 1.42x.
 
 ![Per-Prompt Speedup](plots/run5/per_prompt_qwen72b.png)
+
+### K-Value Optimization (FP16 vs INT4 Draft)
+
+Swept K=1 through K=15 with both FP16 and INT4 draft precision on Qwen 72B (INT8 target, H200).
+
+![Speedup vs K](plots/k_sweep/speedup_vs_k.png)
+
+| K | FP16 Speedup | INT4 Speedup | FP16 Accept | INT4 Accept |
+|---|---|---|---|---|
+| 1 | 1.34x | 1.30x | 88.7% | 88.4% |
+| 3 | 2.02x | 1.94x | 80.6% | 81.1% |
+| 5 | 2.50x | 2.23x | 75.2% | 73.6% |
+| 10 | 2.93x | 2.51x | 61.6% | 62.0% |
+| **15** | **3.30x** | **2.81x** | 55.6% | 55.5% |
+
+FP16 draft beats INT4 at every K, with the gap widening at higher K (+0.49x at K=15). Acceptance rates are nearly identical — the advantage comes from numerical precision in rejection sampling, not prediction quality.
+
+![FP16 vs INT4 Delta](plots/k_sweep/fp16_vs_int4_delta.png)
+
+### Per-Position Acceptance Rate (Novel Metric)
+
+Standard speculative decoding benchmarks report overall acceptance rate. We measure acceptance at **each position within the draft sequence** — revealing how prediction quality degrades with distance from the last verified token.
+
+![Per-Position Heatmap](plots/k_sweep/per_position_heatmap.png)
+
+![Per-Position Decay](plots/k_sweep/per_position_decay.png)
+
+**Key insight**: Position 0 (first draft token) is accepted ~90% of the time. Each subsequent position drops ~5-7 percentage points. By position 14, acceptance is 33% — barely above random. This decay is the fundamental limit of speculative decoding: each draft token is conditioned on previous *draft* tokens, not target-verified tokens. Prediction errors compound.
+
+Despite this decay, **speedup keeps increasing with K** because on a 72B INT8 target, each saved target call (~180ms) far outweighs the cost of a rejected draft token (~2ms).
 
 ### The Story
 
