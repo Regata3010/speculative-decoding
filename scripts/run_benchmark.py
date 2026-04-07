@@ -31,6 +31,7 @@ def main():
     parser.add_argument("--compile", action="store_true", help="torch.compile() both models")
     parser.add_argument("--compile-draft", action="store_true", help="torch.compile() draft model only (recommended)")
     parser.add_argument("--quantize", choices=["4bit", "8bit"], default=None, help="Quantize target model (for 70B+)")
+    parser.add_argument("--quantize-draft", choices=["4bit", "8bit"], default=None, help="Quantize draft model")
     parser.add_argument("--output-dir", default="results", help="Output directory")
     args = parser.parse_args()
 
@@ -55,6 +56,7 @@ def main():
         compile_models=args.compile,
         compile_draft_only=args.compile_draft,
         quantize_target=args.quantize,
+        quantize_draft=args.quantize_draft,
     )
 
     mem = gpu_memory_stats()
