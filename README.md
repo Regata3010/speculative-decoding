@@ -306,6 +306,44 @@ The `--quantize` flag loads target models in 4-bit precision via bitsandbytes, e
 
 Optional `--compile` flag applies `torch.compile(model, mode="reduce-overhead")` to both models. Adds ~30-60s warmup but can improve steady-state throughput by 10-30%.
 
+### Fused Triton Kernel for Rejection Sampling (Negative Result)
+
+Attempted to replace `rejection_sample()` (5-7 sequential PyTorch ops on `(K, vocab)` tensors) with a fused Triton kernel at vocab=152,064. Two autotuned `@triton.jit` kernels — one for per-row softmax stats + acceptance probability, one for Gumbel-max correction sampling — with optional Philox-based reproducible seeding (`src/triton_kernels/fused_rejection.py`).
+
+Tested two API surfaces:
+- **logits-in**: kernel subsumes the upstream `get_probs_from_logits` softmax (`fused_speculative_sample`)
+- **probs-in**: drop-in replacement for `rejection_sample`'s signature (`rejection_sample_triton`)
+
+Bench results across K = 1, 5, 10, 15 in fp16, 200 measurements each (p50):
+
+![Triton vs PyTorch Speedup](plots/triton_bench/speedup_vs_k.png)
+
+| GPU | Vocab | Path | K=1 | K=5 | K=10 | K=15 |
+|---|---|---|---|---|---|---|
+| H200 | 152,064 (Qwen 2.5) | logits-in | 0.61x | 0.70x | 0.70x | 0.71x |
+| H200 | 152,064 (Qwen 2.5) | probs-in | 0.84x | 0.91x | 0.92x | 0.92x |
+| A100 | 152,064 (Qwen 2.5) | logits-in | 0.67x | 0.74x | 0.75x | 0.74x |
+| A100 | 152,064 (Qwen 2.5) | probs-in | 0.88x | 0.94x | 0.94x | 0.94x |
+| A100 | 32,000 (Llama 2/Mistral) | logits-in | **1.01x** | **1.00x** | **1.00x** | **1.00x** |
+| A100 | 32,000 (Llama 2/Mistral) | probs-in | 0.83x | 0.88x | 0.88x | 0.88x |
+
+Speedup > 1.0 means Triton wins. **No configuration delivered a meaningful win**; the closest was A100 + small vocab + logits-in at parity (1.00x). Numbers reported are p50 over 200 measurements to filter transient autotune jitter.
+
+**Why PyTorch wins:**
+
+1. **Single-row softmax serialization.** Kernel A launches `(K,)` programs — one per draft position — each crunching all V=152k elements on one SM. At K ≤ 15 we use ≤ 11% of the H200's 132 SMs, while PyTorch's `F.softmax` parallelizes per-row work across many warps and saturates the device.
+2. **`torch.multinomial` is heavily tuned** (curand + prefix-sum + binary search). A single-kernel Gumbel-max barely matches it on modern NVIDIA GPUs.
+3. **Host-sync floor.** The probs-in path forces two `.item()` syncs per call (`rejected.any()` and `argmax()`), each ~20-40µs. That ~100µs of fixed overhead dominates once you remove the softmax work — explaining why probs-in is *worse* than logits-in at small vocab.
+
+**What would help (not pursued):**
+
+- Multi-block softmax — parallelize each row's softmax across vocab tiles instead of 1-program-per-row. Memory-bandwidth math projects 2-3x for the logits-in path on H200, unchanged for probs-in.
+- CUDA Graphs to eliminate host syncs — significant engineering lift, marginal end-to-end gain (~3-10% at the decoder level on top of the existing 2.60x).
+
+**Decision: not merged into the production decoders.** The kernel is correct — all 3 required statistical tests pass on H200 (greedy equivalence at low temperature, acceptance-rate calibration within 3% over 3000 trials, correction-token TVD < 0.05 over 50,000 trials). Kept as a reference implementation in `src/triton_kernels/` behind `IS_TRITON_AVAILABLE`; reproducible via `scripts/bench_triton_rejection.py`.
+
+**Takeaway:** for vocab ≥ 32k on modern NVIDIA GPUs (Ampere/Hopper), PyTorch's sampling primitives are optimized enough that a naive single-kernel Triton replacement does not pay for the engineering cost. Productive kernel work here would need to target either the softmax fusion path with proper multi-block parallelization, *or* fuse rejection sampling with the target model's last layer to amortize the launch overhead — both significantly more invasive than this single-file replacement.
+
 ### Rigorous Correctness Proofs
 
 - **Total Variation Distance**: 500 samples, TVD < 0.15
